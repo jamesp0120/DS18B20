@@ -35,3 +35,4 @@ while True:
     temperature = read_temperature()
     print("Temperature: {} degrees Celsius".format(temperature))
     time.sleep(1)
+
