@@ -1,0 +1,37 @@
+import os
+import glob
+import time
+ 
+# Load the kernel modules needed to handle the DS18B20 sensor
+os.system('modprobe w1-gpio')
+os.system('modprobe w1-therm')
+ 
+# Location of the sensor in the system
+device_folder = glob.glob('/sys/bus/w1/devices/28*')[0]
+device_file = device_folder + '/w1_slave'
+ 
+# Read the temperature from the DS18B20 sensor
+def read_temperature():
+
+    file = open(device_file, 'r')
+ 
+    lines = file.readlines()
+ 
+    file.close()
+ 
+    while lines[0].strip()[-3:] != 'YES':
+        time.sleep(0.2)
+        lines = read_temperature()
+ 
+    equals_pos = lines[1].find('t=')
+ 
+    if equals_pos != -1:
+        temperature_string = lines[1][equals_pos+2:]
+        temperature_c = float(temperature_string) / 1000.0
+        return temperature_c
+ 
+# Loops the temperature Sensor
+while True:
+    temperature = read_temperature()
+    print("Temperature: {} degrees Celsius".format(temperature))
+    time.sleep(1)
