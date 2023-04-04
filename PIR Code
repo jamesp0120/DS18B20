@@ -1,0 +1,11 @@
+from gpiozero import MotionSensor
+
+pir = MotionSensor(4)
+
+while True:
+	if pir.wait_for_motion()
+	  print("You moved")
+    
+  else:
+    print("Not detected")
+    time.sleep(0.75)
